@@ -62,4 +62,22 @@ docs/       Design doc, architecture, ADRs
 
 ## Status
 
-Early development — the deterministic core and the dispatch loop are the first vertical slice. See `docs/design.md` for the systems still being built.
+The first vertical slice is playable end-to-end. All four MVP systems from the
+design doc are in and tested (15206 headless checks across 11 suites):
+
+- **Dispatch** — the ticket board, employee assignment, live clean-chance
+  readout, deterministic outcomes (Phase 4).
+- **Personnel / HR** — full roster, rest toggles (fatigue recovery), fire
+  (Phase 5).
+- **Economy** — budget, profit-target progress, side contracts (money now for
+  fatigue/loyalty later), day-180 ending (Phase 6).
+- **Investigations** — the incident board: troubleshooters gather clues, the
+  incident flips to deduction, closing choices trade budget/standing/power
+  (Phase 7).
+- **Narrative + endings** — the day-12 faction-allegiance prompt, and four
+  faction-aware endings on day 180 (Phase 8).
+
+What is still placeholder: the office backdrop is a flat colour (the isometric
+office view is scaffolded but not yet drawn), art/audio are absent, and the
+scenario beyond the scripted milestones is procedurally filled rather than
+authored day-by-day. See `docs/design.md` for what is planned next.

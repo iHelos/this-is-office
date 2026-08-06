@@ -13,6 +13,7 @@ extends Control
 @onready var personnel_view: Control = $PersonnelView
 @onready var economy_view: Control = $EconomyView
 @onready var investigations_view: Control = $InvestigationsView
+@onready var narrative_view: Control = $NarrativeView
 
 
 func _ready() -> void:
@@ -21,6 +22,7 @@ func _ready() -> void:
 	hud.open_investigations.connect(_open_investigations)
 	hud.open_economy.connect(_open_economy)
 	hud.end_day_requested.connect(_on_end_day)
+	narrative_view.chosen.connect(_on_narrative_choice)
 	_show_intro_for_day(Game.current_day())
 
 
@@ -55,6 +57,28 @@ func _show_intro_for_day(day: int) -> void:
 		notice.text = L10n.t(String(entry["intro"]))
 	else:
 		notice.text = ""
+	# Day-12 faction choice is gated by a flag set at end of day 12; the prompt
+	# fires the first morning the player sees the flag without having chosen.
+	_maybe_prompt_faction_choice()
+
+
+func _maybe_prompt_faction_choice() -> void:
+	if not bool(Game.state.flags.get("faction_choice_due", false)):
+		return
+	if not Game.allied_faction().is_empty():
+		return
+	# Present both rival departments. The chosen faction's standing rises; the
+	# choice is recorded as the faction_choice flag for the ending screen.
+	narrative_view.present("narrative.faction_choice.prompt", [
+		{"id": "meridian", "label_key": "narrative.faction_choice.meridian", "flag_key": "faction_choice", "flag_value": "meridian"},
+		{"id": "vertex", "label_key": "narrative.faction_choice.vertex", "flag_key": "faction_choice", "flag_value": "vertex"},
+	])
+
+
+func _on_narrative_choice(option_id: String, flag_key: String, flag_value: String) -> void:
+	# option_id is the faction id for the faction choice; the chosen ally gains
+	# standing, the other is left cold.
+	Game.apply_narrative_choice(flag_key, flag_value, option_id, 0.5)
 
 
 func _show_notice(screen: String) -> void:

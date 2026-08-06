@@ -54,3 +54,11 @@ economy.daily_salaries,Зарплаты/день,Salaries/day
 economy.contracts,Побочные контракты,Side contracts
 economy.day_summary,Итоги дня,Day summary
 economy.end,Закрыть,Close
+narrative.faction_choice.prompt,Война отделов началась. С кем ты?,The department war has begun. Whose side are you on?
+narrative.faction_choice.meridian,Встать с Меридианом,Side with Meridian
+narrative.faction_choice.vertex,Встать с Вертексом,Side with Vertex
+ending.allied,Твой союзник:,Your ally:
+ending.target_hit.allied,Реструктуризация пережита. Союзник прикрыл, цель взята.,Restructuring survived. Your ally covered you; the target was hit.
+ending.target_hit.solo,Реструктуризация пережита. Цель взята в одиночку.,Restructuring survived. The target was hit alone.
+ending.target_missed.allied,Союзник не спас. Цель провалена.,Your ally could not save you. The target was missed.
+ending.target_missed.solo,Цель провалена. Один доллар и рукопожатие.,The target was missed. A dollar and a handshake.

@@ -185,6 +185,26 @@ func ending_outcome() -> String:
 	return "target_missed"
 
 
+## Apply a narrative choice that sets a flag and bumps a faction's standing. Used
+## by the day-12 faction-allegiance prompt; generic enough for later decisions.
+func apply_narrative_choice(flag_key: String, flag_value: String, faction_id: String, standing_delta: float) -> void:
+	if state == null:
+		return
+	state.flags[flag_key] = flag_value
+	var faction: Faction = state.faction_by_id(faction_id)
+	if faction != null:
+		faction.standing = clampf(faction.standing + standing_delta, -1.0, 1.0)
+	state.log.append({"kind": "narrative_choice", "flag_key": flag_key, "flag_value": flag_value, "day": state.day})
+	state_changed.emit()
+
+
+## The id of the faction the player allied with on day 12, or "" if none.
+func allied_faction() -> String:
+	if state == null:
+		return ""
+	return String(state.flags.get("faction_choice", ""))
+
+
 func _find_contract(id: String) -> Dictionary:
 	for c: Variant in contract_catalog:
 		var d: Dictionary = c as Dictionary

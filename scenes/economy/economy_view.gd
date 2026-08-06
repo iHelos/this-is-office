@@ -85,14 +85,15 @@ func _refresh_ending() -> void:
 		ending_label.visible = false
 		return
 	ending_label.visible = true
-	# The ending text is shaped by whether the profit target was hit. A richer
-	# ending (faction-aware) lands in the narrative phase; this is the ledger.
+	# The ending is shaped by both whether the target was hit and whether the
+	# player allied with a faction on day 12. Four combinations, four texts.
 	var outcome: String = Game.ending_outcome()
-	match outcome:
-		"target_hit":
-			ending_label.text = "Restructuring survived. The severance is yours."
-		"target_missed":
-			ending_label.text = "Restructuring survived, but the target was missed. A dollar and a handshake."
-		_:
-			ending_label.text = ""
+	var ally: String = Game.allied_faction()
+	var has_ally := not ally.is_empty()
+	var key := "ending.%s.%s" % [outcome, "allied" if has_ally else "solo"]
+	ending_label.text = L10n.t(key)
+	if has_ally:
+		var faction: Faction = Game.state.faction_by_id(ally)
+		var ally_name: String = L10n.t(faction.name_key) if faction != null else ally
+		ending_label.text += "\n%s %s" % [L10n.t("ending.allied"), ally_name]
 	ending_label.add_theme_font_size_override("font_size", 20)
