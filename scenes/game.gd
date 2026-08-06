@@ -10,6 +10,7 @@ extends Control
 @onready var hud: Control = $HUD
 @onready var notice: Label = %Notice
 @onready var dispatch_view: Control = $DispatchView
+@onready var personnel_view: Control = $PersonnelView
 
 
 func _ready() -> void:
@@ -26,7 +27,7 @@ func _open_dispatch() -> void:
 
 
 func _open_personnel() -> void:
-	_show_notice("personnel")
+	personnel_view.open()
 
 
 func _open_investigations() -> void:
@@ -38,7 +39,9 @@ func _open_economy() -> void:
 
 
 func _on_end_day() -> void:
-	Game.end_day()
+	# Collect any rest the player staged in the personnel screen, then roll. This
+	# keeps the one canonical end-of-day path and applies rest deterministically.
+	Game.end_day_with_staged_rest()
 	_show_intro_for_day(Game.current_day())
 
 

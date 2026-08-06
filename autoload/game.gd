@@ -80,6 +80,44 @@ func end_day(actions: Dictionary = {}) -> void:
 	state_changed.emit()
 
 
+## Toggle an employee's rest flag for the coming night. Rest is applied at end of
+## day through Sim.advance, so this only stages the intent — the employee still
+## appears in the pool until the day rolls.
+func toggle_rest(employee_id: String) -> void:
+	if state == null:
+		return
+	var e: Employee = state.employee_by_id(employee_id)
+	if e == null or not e.employed:
+		return
+	e.on_rest = not e.on_rest
+	state_changed.emit()
+
+
+## Fire an employee immediately. This is a player decision, not a simulation
+## step, so it mutates the live state directly. The unemployed employee stays in
+## the roster (marked) so the log can still reference them.
+func fire(employee_id: String) -> void:
+	if state == null:
+		return
+	var e: Employee = state.employee_by_id(employee_id)
+	if e == null or not e.employed:
+		return
+	e.employed = false
+	e.on_rest = false
+	state.log.append({"kind": "employee_fired", "employee_id": employee_id, "day": state.day})
+	state_changed.emit()
+
+
+## Build the end-of-day actions from any rest flags the player staged during the
+## day, then roll forward. This is the path the HUD's End Day button takes.
+func end_day_with_staged_rest() -> void:
+	var rest_ids: Array = []
+	for e: Employee in state.employees:
+		if e.employed and e.on_rest:
+			rest_ids.append(e.id)
+	end_day({"rest": rest_ids})
+
+
 func _spawn_morning() -> void:
 	# The morning board is generated deterministically from the seed + day, so a
 	# replay lands on the same tickets. We mutate state.tickets in place because
