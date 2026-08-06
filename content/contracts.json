@@ -1,0 +1,31 @@
+{
+	"contracts": [
+		{
+			"id": "ct_freelance",
+			"title_key": "contract.freelance.title",
+			"desc_key": "contract.freelance.desc",
+			"budget_delta": 1200,
+			"fatigue_delta": 0.2,
+			"loyalty_delta": 0.0,
+			"once_per_day": true
+		},
+		{
+			"id": "ct_rival_tip",
+			"title_key": "contract.rival_tip.title",
+			"desc_key": "contract.rival_tip.desc",
+			"budget_delta": 2500,
+			"fatigue_delta": 0.0,
+			"loyalty_delta": -0.2,
+			"once_per_day": true
+		},
+		{
+			"id": "ct_overtime",
+			"title_key": "contract.overtime.title",
+			"desc_key": "contract.overtime.desc",
+			"budget_delta": 800,
+			"fatigue_delta": 0.15,
+			"loyalty_delta": -0.05,
+			"once_per_day": true
+		}
+	]
+}

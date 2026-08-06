@@ -50,7 +50,10 @@ func incidents_for_day(scenario: Dictionary, incident_catalog: Array, day: int, 
 	var scripted: Dictionary = scripted_for_day(scenario, day)
 	var scripted_incidents: Array = scripted.get("incidents", [])
 	for raw: Variant in scripted_incidents:
-		var id: String = String((raw as Dictionary).get("id", ""))
+		# The scenario lists incidents by id string (see content/scenario.json,
+		# e.g. "incidents": ["inc_leak_meridian"]). Accept a bare string or a
+		# {"id": ...} dict so the format stays forgiving.
+		var id: String = String(raw) if raw is String else String((raw as Dictionary).get("id", ""))
 		var template: Dictionary = _lookup_incident_template(incident_catalog, id)
 		if template.is_empty():
 			# An incident referenced in the scenario but missing from the catalog

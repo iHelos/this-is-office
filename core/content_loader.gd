@@ -15,6 +15,7 @@ const PATH_EMPLOYEES := "res://content/employees.json"
 const PATH_TICKETS := "res://content/tickets.json"
 const PATH_INCIDENTS := "res://content/incidents.json"
 const PATH_SCENARIO := "res://content/scenario.json"
+const PATH_CONTRACTS := "res://content/contracts.json"
 
 
 static func _read(path: String) -> Variant:
@@ -49,3 +50,7 @@ static func incidents() -> Array:
 
 static func scenario() -> Dictionary:
 	return (_read(PATH_SCENARIO) as Dictionary)
+
+
+static func contracts() -> Array:
+	return (_read(PATH_CONTRACTS) as Dictionary).get("contracts", []) as Array

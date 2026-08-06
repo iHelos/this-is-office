@@ -41,3 +41,16 @@ scenario.day180.intro,Реструктуризация. Подбиваем ит�
 incident.leak_meridian.title,Утечка в Меридиан,Leak to Meridian
 incident.sabotage_vertex.title,Саботаж Вертекса,Sabotage by Vertex
 incident.espionage.title,Корпоративный шпионаж,Corporate Espionage
+contract.freelance.title,Фриланс-подработка,Freelance gig
+contract.freelance.desc,Быстрый контракт на сторону. Усталость растёт.,A quick side contract. Fatigue rises.
+contract.rival_tip.title,Наводка конкуренту,Tip to a rival
+contract.rival_tip.desc,Продать инсайд. Лояльность команды падает.,Sell an insider tip. Team loyalty drops.
+contract.overtime.title,Сверхурочные,Overtime
+contract.overtime.desc,Гонять команду допоздна. Дёшево и сердито.,Run the team late. Cheap and grim.
+economy.title,Экономика,Economy
+economy.budget,Бюджет,Budget
+economy.target,Цель по прибыли,Profit target
+economy.daily_salaries,Зарплаты/день,Salaries/day
+economy.contracts,Побочные контракты,Side contracts
+economy.day_summary,Итоги дня,Day summary
+economy.end,Закрыть,Close

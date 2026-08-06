@@ -19,7 +19,12 @@ var state: GameState = null
 var scenario: Dictionary = {}
 var ticket_catalog: Array = []
 var incident_catalog: Array = []
+var contract_catalog: Array = []
 var tickets_per_day: int = TICKETS_PER_DAY_DEFAULT
+# Contracts flagged once_per_day are tracked here so they cannot be farmed; the
+# set clears on every end_day. Lives on the autoload (not the state) because it
+# is UI-session bookkeeping, not part of the deterministic world.
+var contracts_used_today: Dictionary = {}
 
 
 func _ready() -> void:
@@ -28,8 +33,19 @@ func _ready() -> void:
 	scenario = ContentLoader.scenario()
 	ticket_catalog = ContentLoader.tickets()
 	incident_catalog = ContentLoader.incidents()
+	contract_catalog = ContentLoader.contracts()
 	var balance: Dictionary = ContentLoader.balance()
 	tickets_per_day = int(balance.get("tickets_per_day", TICKETS_PER_DAY_DEFAULT))
+
+
+func daily_salaries() -> int:
+	# Surfaces the economy calculation for the economy screen without the UI
+	# reaching into the core classes directly.
+	if state == null:
+		return 0
+	var economy := Economy.new()
+	economy.apply_balance(ContentLoader.balance())
+	return economy.daily_salaries(state.employees)
 
 
 ## Start a fresh campaign from [param seed_value_]. Loads the scripted roster
@@ -75,7 +91,14 @@ func assign_ticket(ticket_id: String, employee_ids: Array) -> void:
 func end_day(actions: Dictionary = {}) -> void:
 	if state == null:
 		return
+	# Apply any scripted flags for the day we are leaving (the scenario's flag_set
+	# fires at end of that day, so e.g. day 12's faction_choice_due is set as day
+	# 12 closes and is visible on the morning of day 13).
+	var leaving_entry: Dictionary = scenario.get(str(state.day), {})
+	for flag: String in leaving_entry.get("flag_set", {}):
+		state.flags[flag] = (leaving_entry["flag_set"] as Dictionary)[flag]
 	state = Sim.advance(state, actions, Rng.new(seed_value))
+	contracts_used_today.clear()
 	_spawn_morning()
 	state_changed.emit()
 
@@ -116,6 +139,58 @@ func end_day_with_staged_rest() -> void:
 		if e.employed and e.on_rest:
 			rest_ids.append(e.id)
 	end_day({"rest": rest_ids})
+
+
+## Take a side contract: budget now, fatigue/loyalty cost applied across the
+## employed staff. once_per_day contracts are gated by [member contracts_used_today].
+## Returns true if the contract was applied.
+func take_contract(contract_id: String) -> bool:
+	if state == null:
+		return false
+	var contract: Dictionary = _find_contract(contract_id)
+	if contract.is_empty():
+		return false
+	if bool(contract.get("once_per_day", false)) and contracts_used_today.has(contract_id):
+		return false
+	var budget_delta: int = int(contract.get("budget_delta", 0))
+	var fatigue_delta: float = float(contract.get("fatigue_delta", 0.0))
+	var loyalty_delta: float = float(contract.get("loyalty_delta", 0.0))
+	var economy := Economy.new()
+	state.budget = economy.settle(state.budget, budget_delta)
+	if budget_delta > 0:
+		state.profit_banked += budget_delta
+	for e: Employee in state.employees:
+		if not e.employed:
+			continue
+		e.fatigue = clampf(e.fatigue + fatigue_delta, 0.0, 1.0)
+		e.loyalty = clampf(e.loyalty + loyalty_delta, -1.0, 1.0)
+	if bool(contract.get("once_per_day", false)):
+		contracts_used_today[contract_id] = true
+	state.log.append({"kind": "contract_taken", "contract_id": contract_id, "budget_delta": budget_delta, "day": state.day})
+	state_changed.emit()
+	return true
+
+
+## True when the campaign has reached its final day and the ending should play.
+func campaign_over() -> bool:
+	return state != null and state.day >= GameState.CAMPAIGN_DAYS
+
+
+## A coarse outcome label for the ending screen: did the player hit the target?
+func ending_outcome() -> String:
+	if state == null:
+		return "incomplete"
+	if state.profit_banked >= state.target:
+		return "target_hit"
+	return "target_missed"
+
+
+func _find_contract(id: String) -> Dictionary:
+	for c: Variant in contract_catalog:
+		var d: Dictionary = c as Dictionary
+		if String(d.get("id", "")) == id:
+			return d
+	return {}
 
 
 func _spawn_morning() -> void:

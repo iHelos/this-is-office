@@ -11,6 +11,7 @@ extends Control
 @onready var notice: Label = %Notice
 @onready var dispatch_view: Control = $DispatchView
 @onready var personnel_view: Control = $PersonnelView
+@onready var economy_view: Control = $EconomyView
 
 
 func _ready() -> void:
@@ -35,7 +36,7 @@ func _open_investigations() -> void:
 
 
 func _open_economy() -> void:
-	_show_notice("economy")
+	economy_view.open()
 
 
 func _on_end_day() -> void:
