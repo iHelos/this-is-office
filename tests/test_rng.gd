@@ -7,9 +7,6 @@ extends RefCounted
 ## [code]core/rng.gd[/code] silently changes the stream, this suite fails before
 ## anything downstream can be misread as a gameplay bug.
 
-const Rng := preload("res://core/rng.gd")
-
-
 func run(t: TestCase) -> void:
 	_same_seed_replays_same_stream(t)
 	_fork_does_not_advance_parent(t)
