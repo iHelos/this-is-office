@@ -1,11 +1,11 @@
 extends Control
 ## The title screen.
 ##
-## The only screen that exists before the gameplay loop lands, so it doubles as
-## a smoke test that autoloads and translations wire up. New Game seeds a fresh
-## campaign; Settings toggles the language so the translation seam is visible
-## immediately; Quit exits. Once [code]scenes/game.tscn[/code] exists, New Game
-## will hand off to it instead of printing a placeholder.
+## Owns the path into the game: New Game seeds a fresh campaign through the
+## Game autoload and changes to the gameplay scene; Settings toggles the
+## language so the translation seam is visible immediately; Quit exits.
+
+const GAME_SCENE := "res://scenes/game.tscn"
 
 @onready var new_game_button: Button = %NewGameButton
 @onready var settings_button: Button = %SettingsButton
@@ -31,10 +31,10 @@ func _refresh_labels(_locale: String = "") -> void:
 
 func _on_new_game() -> void:
 	# Seed from the wall clock so each campaign starts somewhere new; the
-	# deterministic core will still replay identically from this seed.
-	Game.start_new_game(int(Time.get_unix_time_from_system()) % 1000000)
-	# TODO Phase 3: change scene to res://scenes/game.tscn once it exists.
-	print("New game started with seed %d" % Game.seed_value)
+	# deterministic core still replays identically from this seed once set.
+	var seed_from_clock: int = int(Time.get_unix_time_from_system()) % 1000000
+	Game.start_new_game(seed_from_clock)
+	get_tree().change_scene_to_file(GAME_SCENE)
 
 
 func _on_settings() -> void:

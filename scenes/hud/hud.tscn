@@ -1,0 +1,70 @@
+[gd_scene load_steps=2 format=3 uid="uid://btioffhud0001"]
+
+[ext_resource type="Script" path="res://scenes/hud/hud.gd" id="1_hud"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Bar" type="PanelContainer"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBox" type="HBoxContainer" parent="Bar"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DayLabel" type="Label" parent="Bar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Day 1/180"
+
+[node name="BudgetLabel" type="Label" parent="Bar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Budget: 0"
+
+[node name="TargetLabel" type="Label" parent="Bar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Target: 0 / 0"
+
+[node name="Spacer" type="Control" parent="Bar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DispatchButton" type="Button" parent="Bar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dispatch"
+
+[node name="PersonnelButton" type="Button" parent="Bar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Personnel"
+
+[node name="InvestigationsButton" type="Button" parent="Bar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Investigations"
+
+[node name="EconomyButton" type="Button" parent="Bar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Economy"
+
+[node name="EndDayButton" type="Button" parent="Bar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "End Day"
