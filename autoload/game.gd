@@ -193,6 +193,85 @@ func _find_contract(id: String) -> Dictionary:
 	return {}
 
 
+## Gather clues on an incident. Each troubleshooter contributes clues
+## proportional to their xp against the incident's severity, rolled through a
+## day-forked RNG so the result is deterministic. Returns the number of new
+## clues found this action.
+func assign_troubleshooters(incident_id: String, employee_ids: Array) -> int:
+	if state == null:
+		return 0
+	var incident: Incident = _find_incident(incident_id)
+	if incident == null or incident.state != "open":
+		return 0
+	var team: Array = []
+	for id: String in employee_ids:
+		var e: Employee = state.employee_by_id(id)
+		if e != null and e.employed:
+			team.append(e)
+	var rng := Rng.new(seed_value).fork("incident_%s_day_%d" % [incident_id, state.day])
+	var resolve := Resolve.new()
+	resolve.apply_balance(ContentLoader.balance())
+	var found := 0
+	for e: Employee in team:
+		# One clue per troubleshooter whose clean-chance roll succeeds; high-xp
+		# staff are near-certain, rookies are a gamble. Fatigue/loyalty still
+		# apply through clean_chance, so burning out your auditors costs you here.
+		var chance: float = resolve.clean_chance([e], incident.severity)
+		if rng.fork(e.id).chance(chance):
+			found += 1
+		e.fatigue = clampf(e.fatigue + 0.1, 0.0, 1.0)
+	incident.clues_found = mini(incident.clues_found + found, incident.clues_total)
+	if incident.clues_found >= incident.clues_total:
+		incident.state = "deducing"
+	state.log.append({"kind": "clues_gathered", "incident_id": incident_id, "found": found, "day": state.day})
+	state_changed.emit()
+	return found
+
+
+## Close an incident with a chosen option. Looks up the choice's deltas and
+## applies them: budget, faction standing, faction power. The incident is then
+## marked closed and cannot be worked further.
+func close_incident(incident_id: String, choice_id: String) -> bool:
+	if state == null:
+		return false
+	var incident: Incident = _find_incident(incident_id)
+	if incident == null or incident.state != "deducing":
+		return false
+	var choice: Dictionary = _find_choice(incident, choice_id)
+	if choice.is_empty():
+		return false
+	var economy := Economy.new()
+	var budget_delta: int = int(choice.get("budget_delta", 0))
+	state.budget = economy.settle(state.budget, budget_delta)
+	if budget_delta > 0:
+		state.profit_banked += budget_delta
+	var standing_delta: float = float(choice.get("standing_delta", 0.0))
+	var power_delta: int = int(choice.get("faction_power_delta", 0))
+	var faction: Faction = state.faction_by_id(incident.target_faction)
+	if faction != null:
+		faction.standing = clampf(faction.standing + standing_delta, -1.0, 1.0)
+		faction.power = maxi(0, faction.power + power_delta)
+	incident.state = "closed"
+	state.log.append({"kind": "incident_closed", "incident_id": incident_id, "choice": choice_id, "day": state.day})
+	state_changed.emit()
+	return true
+
+
+func _find_incident(id: String) -> Incident:
+	for i: Incident in state.incidents:
+		if i.id == id:
+			return i
+	return null
+
+
+func _find_choice(incident: Incident, choice_id: String) -> Dictionary:
+	for c: Variant in incident.choices:
+		var d: Dictionary = c as Dictionary
+		if String(d.get("id", "")) == choice_id:
+			return d
+	return {}
+
+
 func _spawn_morning() -> void:
 	# The morning board is generated deterministically from the seed + day, so a
 	# replay lands on the same tickets. We mutate state.tickets in place because

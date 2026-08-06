@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://btioffgame0001"]
+[gd_scene load_steps=7 format=3 uid="uid://btioffgame0001"]
 
 [ext_resource type="Script" path="res://scenes/game.gd" id="1_game"]
 [ext_resource type="PackedScene" uid="uid://btioffhud0001" path="res://scenes/hud/hud.tscn" id="2_hud"]
 [ext_resource type="PackedScene" uid="uid://btioffdispatch0001" path="res://scenes/dispatch/dispatch_view.tscn" id="3_dispatch"]
 [ext_resource type="PackedScene" uid="uid://btioffpersonnel0001" path="res://scenes/personnel/personnel_view.tscn" id="4_personnel"]
 [ext_resource type="PackedScene" uid="uid://btioffecon0001" path="res://scenes/economy/economy_view.tscn" id="5_econ"]
+[ext_resource type="PackedScene" uid="uid://btioffinvest0001" path="res://scenes/investigations/investigations_view.tscn" id="6_invest"]
 
 [node name="Game" type="Control"]
 layout_mode = 3
@@ -65,3 +66,5 @@ autowrap_mode = 3
 [node name="PersonnelView" parent="." instance=ExtResource("4_personnel")]
 
 [node name="EconomyView" parent="." instance=ExtResource("5_econ")]
+
+[node name="InvestigationsView" parent="." instance=ExtResource("6_invest")]
