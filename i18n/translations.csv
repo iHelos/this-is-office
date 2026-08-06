@@ -1,0 +1,24 @@
+key,ru,en
+app.title,Это Офис,This Is the Office
+menu.new_game,Новая игра,New Game
+menu.continue,Продолжить,Continue
+menu.settings,Настройки,Settings
+menu.quit,Выйти,Quit
+menu.language,Язык,Language
+menu.difficulty,Сложность,Difficulty
+menu.seed,Сид,Seed
+menu.start,Начать,Start
+menu.back,Назад,Back
+hud.day,День,Day
+hud.of,из,of
+hud.money,Бюджет,Budget
+hud.target,Цель,Target
+hud.dispatch,Диспетчерская,Dispatch
+hud.personnel,Кадры,Personnel
+hud.investigations,Расследования,Investigations
+hud.economy,Экономика,Economy
+hud.end_day,Закончить день,End Day
+common.ok,ОК,OK
+common.cancel,Отмена,Cancel
+common.yes,Да,Yes
+common.no,Нет,No

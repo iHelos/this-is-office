@@ -1,0 +1,18 @@
+# Godot 4 editor cache and import metadata
+.godot/
+.import/
+
+# Export presets are local developer state, not shared content
+export.cfg
+export_presets.cfg
+
+# Built bundles
+/build/
+/export/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/

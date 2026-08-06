@@ -1,0 +1,21 @@
+<svg height="128" width="128" xmlns="http://www.w3.org/2000/svg">
+  <!-- This Is the Office icon: an isometric office building at dusk.
+       Placeholder art; the palette is intentionally limited until art/style.json lands. -->
+  <rect width="128" height="128" fill="#1f2733"/>
+  <!-- ground -->
+  <polygon points="64,28 120,56 64,84 8,56" fill="#2c3848"/>
+  <!-- left face -->
+  <polygon points="8,56 64,84 64,120 8,92" fill="#243140"/>
+  <!-- right face -->
+  <polygon points="120,56 64,84 64,120 120,92" fill="#2c3848"/>
+  <!-- windows on the right face -->
+  <g fill="#e8b45c">
+    <rect x="78" y="64" width="10" height="8"/>
+    <rect x="92" y="64" width="10" height="8"/>
+    <rect x="106" y="64" width="6" height="8"/>
+    <rect x="78" y="78" width="10" height="8"/>
+    <rect x="92" y="78" width="10" height="8"/>
+  </g>
+  <!-- roof slab -->
+  <polygon points="64,28 120,56 64,84 8,56" fill="none" stroke="#e8b45c" stroke-width="2"/>
+</svg>
