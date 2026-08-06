@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://btioffemp0001"]
+
+[ext_resource type="Script" path="res://ui/employee_card.gd" id="1_ec"]
+
+[node name="EmployeeCard" type="PanelContainer"]
+custom_minimum_size = Vector2(240, 0)
+script = ExtResource("1_ec")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="NameLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "name · role"
+
+[node name="StatLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "xp · fat · loy"
+
+[node name="RestLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+modulate = Color(0.7, 0.7, 0.4, 1)
+text = "(resting)"

@@ -1,0 +1,111 @@
+[gd_scene load_steps=2 format=3 uid="uid://btioffdispatch0001"]
+
+[ext_resource type="Script" path="res://scenes/dispatch/dispatch_view.gd" id="1_dv"]
+
+[node name="DispatchView" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dv")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Columns" type="HBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TicketsCol" type="VBoxContainer" parent="Panel/Margin/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="Panel/Margin/Columns/TicketsCol"]
+layout_mode = 2
+text = "Tickets"
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/Margin/Columns/TicketsCol"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TicketList" type="VBoxContainer" parent="Panel/Margin/Columns/TicketsCol/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ActiveCol" type="VBoxContainer" parent="Panel/Margin/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ActiveLabel" type="Label" parent="Panel/Margin/Columns/ActiveCol"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(select a ticket)"
+horizontal_alignment = 1
+
+[node name="ChanceLabel" type="Label" parent="Panel/Margin/Columns/ActiveCol"]
+unique_name_in_owner = true
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+
+[node name="SendButton" type="Button" parent="Panel/Margin/Columns/ActiveCol"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+disabled = true
+text = "Send team"
+
+[node name="CloseButton" type="Button" parent="Panel/Margin/Columns/ActiveCol"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
+text = "Close"
+
+[node name="PoolCol" type="VBoxContainer" parent="Panel/Margin/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title2" type="Label" parent="Panel/Margin/Columns/PoolCol"]
+layout_mode = 2
+text = "Available staff"
+
+[node name="Scroll2" type="ScrollContainer" parent="Panel/Margin/Columns/PoolCol"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EmployeeList" type="VBoxContainer" parent="Panel/Margin/Columns/PoolCol/Scroll2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6

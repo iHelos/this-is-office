@@ -9,6 +9,7 @@ extends Control
 
 @onready var hud: Control = $HUD
 @onready var notice: Label = %Notice
+@onready var dispatch_view: Control = $DispatchView
 
 
 func _ready() -> void:
@@ -21,7 +22,7 @@ func _ready() -> void:
 
 
 func _open_dispatch() -> void:
-	_show_notice("dispatch")
+	dispatch_view.open()
 
 
 func _open_personnel() -> void:
