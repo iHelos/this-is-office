@@ -1,0 +1,43 @@
+{
+	"incidents": [
+		{
+			"id": "inc_leak_meridian",
+			"title": "incident.leak_meridian.title",
+			"kind": "leak",
+			"target_faction": "meridian",
+			"severity": 300,
+			"clues_total": 4,
+			"choices": [
+				{"id": "drop",      "budget_delta": 0,    "standing_delta": 0.0,  "faction_power_delta": 0},
+				{"id": "confront",  "budget_delta": 1500, "standing_delta": -0.3, "faction_power_delta": -10},
+				{"id": "sell",      "budget_delta": 4000, "standing_delta": 0.4,  "faction_power_delta": 5}
+			]
+		},
+		{
+			"id": "inc_sabotage_vertex",
+			"title": "incident.sabotage_vertex.title",
+			"kind": "sabotage",
+			"target_faction": "vertex",
+			"severity": 360,
+			"clues_total": 5,
+			"choices": [
+				{"id": "drop",      "budget_delta": 0,    "standing_delta": 0.0,  "faction_power_delta": 0},
+				{"id": "confront",  "budget_delta": 1800, "standing_delta": -0.3, "faction_power_delta": -10},
+				{"id": "sell",      "budget_delta": 4800, "standing_delta": 0.4,  "faction_power_delta": 5}
+			]
+		},
+		{
+			"id": "inc_espionage",
+			"title": "incident.espionage.title",
+			"kind": "espionage",
+			"target_faction": "meridian",
+			"severity": 480,
+			"clues_total": 6,
+			"choices": [
+				{"id": "drop",      "budget_delta": 0,    "standing_delta": 0.0,  "faction_power_delta": 0},
+				{"id": "confront",  "budget_delta": 2600, "standing_delta": -0.4, "faction_power_delta": -15},
+				{"id": "sell",      "budget_delta": 7000, "standing_delta": 0.5,  "faction_power_delta": 8}
+			]
+		}
+	]
+}

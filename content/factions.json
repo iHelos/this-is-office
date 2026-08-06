@@ -1,0 +1,18 @@
+{
+	"factions": [
+		{
+			"id": "meridian",
+			"name_key": "faction.meridian.name",
+			"agenda": "faction.meridian.agenda",
+			"standing": 0.0,
+			"power": 50
+		},
+		{
+			"id": "vertex",
+			"name_key": "faction.vertex.name",
+			"agenda": "faction.vertex.agenda",
+			"standing": 0.0,
+			"power": 50
+		}
+	]
+}

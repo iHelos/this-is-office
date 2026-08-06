@@ -22,3 +22,22 @@ common.ok,ОК,OK
 common.cancel,Отмена,Cancel
 common.yes,Да,Yes
 common.no,Нет,No
+faction.meridian.name,Меридиан,Meridian
+faction.meridian.agenda,Старый отдел, держит контракты десятилетиями,The old department, holds the contracts for decades
+faction.vertex.name,Вертекс,Vertex
+faction.vertex.agenda,Агрессивный новичок, рвётся к influence,The aggressive newcomer, clawing for influence
+scenario.day1.intro,CTO дал тебе 180 дней до реструктуризации. Набери цель по прибыли.,The CTO gave you 180 days until restructuring. Hit the profit target.
+scenario.day4.intro,Утечка в пользу конкурента. Нужны траблшутеры.,A leak to a rival. Troubleshooters needed.
+scenario.day8.intro,День оценки. Ответы имеют последствия.,Review day. Answers have consequences.
+scenario.day12.intro,Война отделов близко. Выбери сторону.,The department war is near. Pick a side.
+scenario.day13.intro,Отделы пошли в атаку. Завод дымит.,The departments are at each other. The office reels.
+scenario.day15.intro,HR спускает квоту на разнообразие.,HR hands down a diversity quota.
+scenario.day30.intro,Новый инцидент саботажа. Доска заполняется.,A new sabotage incident. The board fills up.
+scenario.day60.intro,Середина срока. Деньги тают.,Midpoint. Money is thinning.
+scenario.day90.intro,Корпоративный шпионаж. Ставки выросли.,Corporate espionage. The stakes climbed.
+scenario.day120.intro,Финальная прямая видна.,The home stretch is in sight.
+scenario.day170.intro,Финальный релиз. Поставь всё на карту.,The final launch. Go all in.
+scenario.day180.intro,Реструктуризация. Подбиваем итог.,Restructuring. Settling accounts.
+incident.leak_meridian.title,Утечка в Меридиан,Leak to Meridian
+incident.sabotage_vertex.title,Саботаж Вертекса,Sabotage by Vertex
+incident.espionage.title,Корпоративный шпионаж,Corporate Espionage

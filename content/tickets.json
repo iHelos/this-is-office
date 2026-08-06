@@ -1,0 +1,76 @@
+{
+	"tickets": [
+		{
+			"kind": "bug",
+			"source_dept": "eng",
+			"severity": 80,
+			"ttl": 2,
+			"reward": 300,
+			"penalty": 150,
+			"requires_roles": []
+		},
+		{
+			"kind": "client_hotfix",
+			"source_dept": "sales",
+			"severity": 260,
+			"ttl": 2,
+			"reward": 900,
+			"penalty": 500,
+			"requires_roles": []
+		},
+		{
+			"kind": "release",
+			"source_dept": "eng",
+			"severity": 420,
+			"ttl": 3,
+			"reward": 1600,
+			"penalty": 800,
+			"requires_roles": []
+		},
+		{
+			"kind": "code_review",
+			"source_dept": "eng",
+			"severity": 60,
+			"ttl": 2,
+			"reward": 180,
+			"penalty": 80,
+			"requires_roles": []
+		},
+		{
+			"kind": "demo",
+			"source_dept": "sales",
+			"severity": 180,
+			"ttl": 2,
+			"reward": 700,
+			"penalty": 350,
+			"requires_roles": []
+		},
+		{
+			"kind": "data_report",
+			"source_dept": "data",
+			"severity": 140,
+			"ttl": 3,
+			"reward": 450,
+			"penalty": 200,
+			"requires_roles": ["analyst"]
+		},
+		{
+			"kind": "production_incident",
+			"source_dept": "ops",
+			"severity": 520,
+			"ttl": 2,
+			"reward": 2000,
+			"penalty": 1100,
+			"requires_roles": []
+		},
+		{
+			"kind": "design_mock",
+			"source_dept": "design",
+			"severity": 110,
+			"ttl": 3,
+			"reward": 380,
+			"penalty": 160,
+			"requires_roles": ["designer"]
+		}
+	]
+}

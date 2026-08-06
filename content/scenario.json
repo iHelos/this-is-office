@@ -1,0 +1,56 @@
+{
+	"1": {
+		"intro": "scenario.day1.intro",
+		"tickets": [
+			{"kind": "bug", "source_dept": "eng", "severity": 80, "ttl": 2, "reward": 300, "penalty": 150}
+		]
+	},
+	"4": {
+		"intro": "scenario.day4.intro",
+		"incidents": ["inc_leak_meridian"]
+	},
+	"8": {
+		"intro": "scenario.day8.intro",
+		"flag_set": {"review_due": true}
+	},
+	"12": {
+		"intro": "scenario.day12.intro",
+		"flag_set": {"faction_choice_due": true}
+	},
+	"13": {
+		"intro": "scenario.day13.intro",
+		"flag_set": {"faction_war": true},
+		"tickets": [
+			{"kind": "production_incident", "source_dept": "ops", "severity": 520, "ttl": 2, "reward": 2000, "penalty": 1100}
+		]
+	},
+	"15": {
+		"intro": "scenario.day15.intro",
+		"flag_set": {"quota_diversity": true}
+	},
+	"30": {
+		"intro": "scenario.day30.intro",
+		"incidents": ["inc_sabotage_vertex"]
+	},
+	"60": {
+		"intro": "scenario.day60.intro"
+	},
+	"90": {
+		"intro": "scenario.day90.intro",
+		"incidents": ["inc_espionage"]
+	},
+	"120": {
+		"intro": "scenario.day120.intro"
+	},
+	"170": {
+		"intro": "scenario.day170.intro",
+		"flag_set": {"final_launch_due": true},
+		"tickets": [
+			{"kind": "release", "source_dept": "eng", "severity": 600, "ttl": 3, "reward": 6000, "penalty": 3000}
+		]
+	},
+	"180": {
+		"intro": "scenario.day180.intro",
+		"flag_set": {"restructuring": true}
+	}
+}

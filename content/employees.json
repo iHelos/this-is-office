@@ -1,0 +1,16 @@
+{
+	"employees": [
+		{"id": "e_ann",  "name": "Анна Ковалёва",   "dept": "eng", "role": "dev",            "xp": 320, "loyalty": 0.4, "traits": ["meticulous"]},
+		{"id": "e_bor",  "name": "Борис Орлов",      "dept": "eng", "role": "dev",            "xp": 140, "loyalty": 0.0, "traits": []},
+		{"id": "e_vic",  "name": "Виктор Сайкин",    "dept": "eng", "role": "architect",      "xp": 900, "loyalty": 0.2, "traits": ["veteran"]},
+		{"id": "e_gal",  "name": "Галина Рудакова",  "dept": "eng", "role": "dev",            "xp": 60,  "loyalty": -0.1,"traits": ["rookie"]},
+		{"id": "e_dim",  "name": "Дмитрий Лесной",   "dept": "data", "role": "analyst",       "xp": 210, "loyalty": 0.1, "traits": []},
+		{"id": "e_ela",  "name": "Эла Бергман",      "dept": "data", "role": "analyst",       "xp": 480, "loyalty": 0.3, "traits": ["meticulous"]},
+		{"id": "e_kir",  "name": "Кирилл Танеев",    "dept": "design", "role": "designer",    "xp": 180, "loyalty": 0.0, "traits": []},
+		{"id": "e_mira", "name": "Мира Хоссейни",    "dept": "design", "role": "designer",    "xp": 260, "loyalty": 0.2, "traits": []},
+		{"id": "e_ole",  "name": "Олег Гнатюк",      "dept": "ops", "role": "troubleshooter", "xp": 600, "loyalty": -0.2,"traits": ["cynical"]},
+		{"id": "e_yu",   "name": "Юна Такэда",       "dept": "ops", "role": "troubleshooter", "xp": 350, "loyalty": 0.5, "traits": []},
+		{"id": "e_pet",  "name": "Пётр Швец",        "dept": "eng", "role": "dev",            "xp": 110, "loyalty": 0.0, "traits": []},
+		{"id": "e_lina", "name": "Лина Абади",       "dept": "data", "role": "analyst",       "xp": 95,  "loyalty": 0.1, "traits": ["rookie"]}
+	]
+}
