@@ -62,3 +62,48 @@ ending.target_hit.allied,Реструктуризация пережита. Со
 ending.target_hit.solo,Реструктуризация пережита. Цель взята в одиночку.,Restructuring survived. The target was hit alone.
 ending.target_missed.allied,Союзник не спас. Цель провалена.,Your ally could not save you. The target was missed.
 ending.target_missed.solo,Цель провалена. Один доллар и рукопожатие.,The target was missed. A dollar and a handshake.
+choice.continue,Далее,Continue
+choice.begin,Приступить,Begin
+choice.to_ending,К финалу,To the ending
+cutscene.skip,Пропустить,Skip
+speaker.cto,CTO,CTO
+speaker.manager,Менеджер (ты),Manager (you)
+speaker.narrator, , 
+speaker.hr,HR,HR
+speaker.meridian,Меридиан,Meridian
+speaker.vertex,Вертекс,Vertex
+act1.title,Акт I — Новый менеджер,Act I — The New Manager
+act2.title,Акт II — Война отделов,Act II — The Department War
+act3.title,Акт III — Финальная прямая,Act III — The Home Stretch
+chapter.arrival.title,Прибытие,Arrival
+chapter.first_incident.title,Первые инциденты,First Incidents
+chapter.review.title,Оценка,Review
+chapter.faction_choice.title,Выбор стороны,Picking a Side
+chapter.war.title,Война,The War
+chapter.quotas.title,Квоты,Quotas
+chapter.escalation.title,Эскалация,Escalation
+chapter.sabotage.title,Саботаж,Sabotage
+chapter.espionage.title,Шпионаж,Espionage
+chapter.launch.title,Запуск,The Launch
+chapter.restructuring.title,Реструктуризация,Restructuring
+cutscene.intro_act1.node1,180 дней. Столько у тебя до реструктуризации. Набери $500k прибыли — или тебя смоет.,180 days. That's how long until restructuring. Bank $500k of profit — or you're gone.
+cutscene.intro_act1.node2,Команда унаследована. Кто-то толковый, кто-то — балласт. Конкуренты уже роют землю.,The team is inherited. Some sharp, some dead weight. The rivals are already circling.
+cutscene.intro_act1.node3,Ладно. Раз они хотят цифр — они их получат.,Fine. If they want numbers, they'll get numbers.
+cutscene.faction.intro,На утреннем стендапе двое приходят одновременно — представители Меридиана и Вертекса.,At the morning standup, two arrive at once — reps from Meridian and Vertex.
+cutscene.faction.pick,Война отделов началась. Один из них станет твоим щитом. Другой — ножом.,The department war has begun. One of them will be your shield. The other, your knife.
+cutscene.faction.meridian,Встать с Меридианом,Side with Meridian
+cutscene.faction.vertex,Встать с Вертексом,Side with Vertex
+cutscene.faction.meridian_reply,Меридиан ценит стабильность. Контракты пойдут к тебе — пока ты полезен.,Meridian values stability. The contracts will flow your way — as long as you're useful.
+cutscene.faction.vertex_reply,Вертекс играет жёстко. Ты получишь инсайд и прикрытие — и долги в придачу.,Vertex plays rough. You'll get the inside line and cover — and debts to match.
+cutscene.quotas.intro,HR спускает меморандум: квота на разнообразие. К концу месяца — иначе.,HR drops a memorandum: a diversity quota. By month's end — or else.
+cutscene.quotas.pick,Можно выполнить ценой части команды. Или саботировать, прикрываясь бюрократией.,You can comply, costing you part of the team. Or sabotage it, hiding behind red tape.
+cutscene.quotas.comply,Выполнить квоту,Comply with the quota
+cutscene.quotas.sabotage,Саботировать,Sabotage it
+cutscene.quotas.comply_reply,Ты увольняешь неугодных HR. Команда замечает.,You let go of those HR flagged. The team notices.
+cutscene.quotas.sabotage_reply,Ты топишь квоту в комиссиях и пересмотрах. Это стоит денег, но люди остаются.,You drown the quota in committees and reviews. It costs money, but the people stay.
+cutscene.act2.node1,Конкуренты перестали стучаться. Теперь они выбивают двери.,The rivals have stopped knocking. Now they're kicking doors in.
+cutscene.act2.node2,CTO вызывает тебя: мне нужны результаты. Любой ценой.,The CTO summons you: I need results. At any cost.
+cutscene.finale.node1,День реструктуризации. Суммируем.,Restructuring day. Let's settle the accounts.
+cutscene.finale.node2,Цифры на столе. Ты знаешь, заслужил ли ты свой выход.,The numbers are on the table. You know whether you've earned your way out.
+incident.bribe_offer.title,Предложение взятки,Bribe Offer
+incident.data_heist.title,Кража данных,Data Heist

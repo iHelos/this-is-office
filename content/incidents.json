@@ -38,6 +38,32 @@
 				{"id": "confront",  "budget_delta": 2600, "standing_delta": -0.4, "faction_power_delta": -15},
 				{"id": "sell",      "budget_delta": 7000, "standing_delta": 0.5,  "faction_power_delta": 8}
 			]
+		},
+		{
+			"id": "inc_bribe_offer",
+			"title": "incident.bribe_offer.title",
+			"kind": "bribe",
+			"target_faction": "vertex",
+			"severity": 280,
+			"clues_total": 3,
+			"choices": [
+				{"id": "drop",      "budget_delta": 0,    "standing_delta": 0.0,  "faction_power_delta": 0},
+				{"id": "confront",  "budget_delta": 1200, "standing_delta": -0.25, "faction_power_delta": -8},
+				{"id": "sell",      "budget_delta": 3500, "standing_delta": 0.35, "faction_power_delta": 4}
+			]
+		},
+		{
+			"id": "inc_data_heist",
+			"title": "incident.data_heist.title",
+			"kind": "heist",
+			"target_faction": "meridian",
+			"severity": 400,
+			"clues_total": 5,
+			"choices": [
+				{"id": "drop",      "budget_delta": 0,    "standing_delta": 0.0,  "faction_power_delta": 0},
+				{"id": "confront",  "budget_delta": 2200, "standing_delta": -0.35, "faction_power_delta": -12},
+				{"id": "sell",      "budget_delta": 6000, "standing_delta": 0.45, "faction_power_delta": 7}
+			]
 		}
 	]
 }

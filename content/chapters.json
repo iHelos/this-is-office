@@ -1,0 +1,15 @@
+{
+	"chapters": [
+		{"id": "ch_arrival",       "title_key": "chapter.arrival.title",       "act": "act1", "act_title_key": "act1.title", "start_day": 1,   "end_day": 3,   "cutscene_id": "cs_intro_act1"},
+		{"id": "ch_first_incident","title_key": "chapter.first_incident.title","act": "act1", "act_title_key": "act1.title", "start_day": 4,   "end_day": 7,   "cutscene_id": ""},
+		{"id": "ch_review",        "title_key": "chapter.review.title",         "act": "act1", "act_title_key": "act1.title", "start_day": 8,   "end_day": 11,  "cutscene_id": ""},
+		{"id": "ch_faction_choice","title_key": "chapter.faction_choice.title", "act": "act1", "act_title_key": "act1.title", "start_day": 12,  "end_day": 12,  "cutscene_id": "cs_faction_choice"},
+		{"id": "ch_war",           "title_key": "chapter.war.title",            "act": "act1", "act_title_key": "act1.title", "start_day": 13,  "end_day": 14,  "cutscene_id": ""},
+		{"id": "ch_quotas",        "title_key": "chapter.quotas.title",         "act": "act1", "act_title_key": "act1.title", "start_day": 15,  "end_day": 30,  "cutscene_id": "cs_quotas"},
+		{"id": "ch_escalation",    "title_key": "chapter.escalation.title",     "act": "act2", "act_title_key": "act2.title", "start_day": 31,  "end_day": 59,  "cutscene_id": ""},
+		{"id": "ch_sabotage",      "title_key": "chapter.sabotage.title",       "act": "act2", "act_title_key": "act2.title", "start_day": 60,  "end_day": 90,  "cutscene_id": "cs_act2_prologue"},
+		{"id": "ch_espionage",     "title_key": "chapter.espionage.title",      "act": "act3", "act_title_key": "act3.title", "start_day": 91,  "end_day": 169, "cutscene_id": ""},
+		{"id": "ch_launch",        "title_key": "chapter.launch.title",         "act": "act3", "act_title_key": "act3.title", "start_day": 170, "end_day": 179, "cutscene_id": ""},
+		{"id": "ch_restructuring", "title_key": "chapter.restructuring.title",  "act": "act3", "act_title_key": "act3.title", "start_day": 180, "end_day": 180, "cutscene_id": "cs_finale"}
+	]
+}

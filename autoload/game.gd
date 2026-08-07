@@ -20,11 +20,17 @@ var scenario: Dictionary = {}
 var ticket_catalog: Array = []
 var incident_catalog: Array = []
 var contract_catalog: Array = []
+var chapter_catalog: Array = []
+var cutscene_catalog: Array = []
 var tickets_per_day: int = TICKETS_PER_DAY_DEFAULT
 # Contracts flagged once_per_day are tracked here so they cannot be farmed; the
 # set clears on every end_day. Lives on the autoload (not the state) because it
 # is UI-session bookkeeping, not part of the deterministic world.
 var contracts_used_today: Dictionary = {}
+# Cutscene ids already shown this campaign. A cutscene plays at most once; the
+# flag persists across days so re-entering a chapter's day range does not replay
+# its prologue. Lives on the autoload for the same reason contracts_used_today.
+var seen_cutscenes: Dictionary = {}
 
 
 func _ready() -> void:
@@ -34,6 +40,8 @@ func _ready() -> void:
 	ticket_catalog = ContentLoader.tickets()
 	incident_catalog = ContentLoader.incidents()
 	contract_catalog = ContentLoader.contracts()
+	chapter_catalog = ContentLoader.chapters()
+	cutscene_catalog = ContentLoader.cutscenes()
 	var balance: Dictionary = ContentLoader.balance()
 	tickets_per_day = int(balance.get("tickets_per_day", TICKETS_PER_DAY_DEFAULT))
 
@@ -203,6 +211,104 @@ func allied_faction() -> String:
 	if state == null:
 		return ""
 	return String(state.flags.get("faction_choice", ""))
+
+
+# --- Cutscenes ---------------------------------------------------------------
+#
+# The campaign drives cutscenes in two ways. Day-scripted cutscenes play on the
+# first morning of the chapter that names them (see content/chapters.json).
+# Reactive cutscenes (with a non-empty trigger block in cutscenes.json) play the
+# first morning their trigger evaluates true against the live state. In both
+# cases a cutscene id tracked in seen_cutscenes never repeats.
+
+## The chapter that owns [param day], or null if none covers it.
+func chapter_for_day(day: int) -> Chapter:
+	for raw: Variant in chapter_catalog:
+		var ch: Chapter = Chapter.from_dict(raw as Dictionary)
+		if ch.contains_day(day):
+			return ch
+	return null
+
+
+## The cutscene to play this morning, or null. A cutscene plays at most once: a
+## scripted one fires on the first day of its chapter, a reactive one fires as
+## soon as its trigger is true. The caller (the day scene) checks this every
+## morning and opens cutscene_view when it returns non-null.
+func pending_cutscene() -> Cutscene:
+	if state == null:
+		return null
+	# Scripted path: the chapter owning today names a cutscene we have not seen.
+	var chapter: Chapter = chapter_for_day(state.day)
+	if chapter != null and not chapter.cutscene_id.is_empty() and not seen_cutscenes.has(chapter.cutscene_id):
+		var scripted: Cutscene = _cutscene_by_id(chapter.cutscene_id)
+		if scripted != null:
+			return scripted
+	# Reactive path: any cutscene whose trigger is true and we have not seen.
+	# Triggers are evaluated against live state, so e.g. a mutiny cutscene can
+	# fire the morning loyalty collapses.
+	for raw: Variant in cutscene_catalog:
+		var cs: Cutscene = Cutscene.from_dict(raw as Dictionary)
+		if seen_cutscenes.has(cs.id):
+			continue
+		if cs.trigger.is_empty():
+			continue
+		if Triggers.evaluate(state, cs.trigger):
+			return cs
+	return null
+
+
+## Apply the effects of a cutscene choice and return the next node id (or "" if
+## the choice ends the cutscene). Effects are a list of small dicts so they stay
+## authorable in JSON; each kind maps to one state mutation here.
+func apply_cutscene_choice(cutscene_id: String, node_id: String, choice: Dictionary) -> String:
+	if state == null:
+		return ""
+	mark_cutscene_seen(cutscene_id)
+	for effect: Variant in choice.get("effects", []):
+		_apply_cutscene_effect(effect as Dictionary)
+	state.log.append({"kind": "cutscene_choice", "cutscene_id": cutscene_id, "node_id": node_id, "day": state.day})
+	state_changed.emit()
+	return String(choice.get("next", ""))
+
+
+func mark_cutscene_seen(cutscene_id: String) -> void:
+	if cutscene_id.is_empty():
+		return
+	seen_cutscenes[cutscene_id] = true
+
+
+func _apply_cutscene_effect(effect: Dictionary) -> void:
+	# Each effect is one key -> argument. Unknown effects are ignored with a
+	# warning so a typo never crashes a cutscene mid-line.
+	if effect.has("set_flag"):
+		var args: Array = effect["set_flag"]
+		state.flags[String(args[0])] = args[1]
+	elif effect.has("budget"):
+		var economy := Economy.new()
+		var delta: int = int(effect["budget"])
+		state.budget = economy.settle(state.budget, delta)
+		if delta > 0:
+			state.profit_banked += delta
+	elif effect.has("loyalty"):
+		var delta: float = float(effect["loyalty"])
+		for e: Employee in state.employees:
+			if e.employed:
+				e.loyalty = clampf(e.loyalty + delta, -1.0, 1.0)
+	elif effect.has("faction_standing"):
+		var args: Array = effect["faction_standing"]
+		var faction: Faction = state.faction_by_id(String(args[0]))
+		if faction != null:
+			faction.standing = clampf(faction.standing + float(args[1]), -1.0, 1.0)
+	else:
+		push_warning("Game: unknown cutscene effect %s" % str(effect.keys()))
+
+
+func _cutscene_by_id(cutscene_id: String) -> Cutscene:
+	for raw: Variant in cutscene_catalog:
+		var cs: Cutscene = Cutscene.from_dict(raw as Dictionary)
+		if cs.id == cutscene_id:
+			return cs
+	return null
 
 
 func _find_contract(id: String) -> Dictionary:

@@ -1,0 +1,169 @@
+{
+	"cutscenes": [
+		{
+			"id": "cs_intro_act1",
+			"start_node_id": "intro_1",
+			"nodes": [
+				{
+					"id": "intro_1",
+					"speaker_key": "speaker.cto",
+					"text_key": "cutscene.intro_act1.node1",
+					"choices": [
+						{"label_key": "choice.continue", "next": "intro_2"}
+					]
+				},
+				{
+					"id": "intro_2",
+					"speaker_key": "speaker.cto",
+					"text_key": "cutscene.intro_act1.node2",
+					"choices": [
+						{"label_key": "choice.continue", "next": "intro_3"}
+					]
+				},
+				{
+					"id": "intro_3",
+					"speaker_key": "speaker.manager",
+					"text_key": "cutscene.intro_act1.node3",
+					"choices": [
+						{"label_key": "choice.begin", "next": "", "effects": [{"set_flag": ["campaign_started", true]}]}
+					]
+				}
+			]
+		},
+		{
+			"id": "cs_faction_choice",
+			"start_node_id": "fc_intro",
+			"nodes": [
+				{
+					"id": "fc_intro",
+					"speaker_key": "speaker.narrator",
+					"text_key": "cutscene.faction.intro",
+					"choices": [
+						{"label_key": "choice.continue", "next": "fc_pick"}
+					]
+				},
+				{
+					"id": "fc_pick",
+					"speaker_key": "speaker.narrator",
+					"text_key": "cutscene.faction.pick",
+					"choices": [
+						{"label_key": "cutscene.faction.meridian", "next": "fc_meridian", "effects": [
+							{"set_flag": ["faction_choice", "meridian"]},
+							{"faction_standing": ["meridian", 0.5]}
+						]},
+						{"label_key": "cutscene.faction.vertex", "next": "fc_vertex", "effects": [
+							{"set_flag": ["faction_choice", "vertex"]},
+							{"faction_standing": ["vertex", 0.5]}
+						]}
+					]
+				},
+				{
+					"id": "fc_meridian",
+					"speaker_key": "speaker.meridian",
+					"text_key": "cutscene.faction.meridian_reply",
+					"choices": [
+						{"label_key": "choice.continue", "next": ""}
+					]
+				},
+				{
+					"id": "fc_vertex",
+					"speaker_key": "speaker.vertex",
+					"text_key": "cutscene.faction.vertex_reply",
+					"choices": [
+						{"label_key": "choice.continue", "next": ""}
+					]
+				}
+			]
+		},
+		{
+			"id": "cs_quotas",
+			"start_node_id": "q_intro",
+			"nodes": [
+				{
+					"id": "q_intro",
+					"speaker_key": "speaker.hr",
+					"text_key": "cutscene.quotas.intro",
+					"choices": [
+						{"label_key": "choice.continue", "next": "q_pick"}
+					]
+				},
+				{
+					"id": "q_pick",
+					"speaker_key": "speaker.hr",
+					"text_key": "cutscene.quotas.pick",
+					"choices": [
+						{"label_key": "cutscene.quotas.comply", "next": "q_comply", "effects": [
+							{"set_flag": ["quota_complied", true]},
+							{"loyalty": -0.15}
+						]},
+						{"label_key": "cutscene.quotas.sabotage", "next": "q_sabotage", "effects": [
+							{"set_flag": ["quota_sabotaged", true]},
+							{"loyalty": 0.1},
+							{"budget": -300}
+						]}
+					]
+				},
+				{
+					"id": "q_comply",
+					"speaker_key": "speaker.manager",
+					"text_key": "cutscene.quotas.comply_reply",
+					"choices": [
+						{"label_key": "choice.continue", "next": ""}
+					]
+				},
+				{
+					"id": "q_sabotage",
+					"speaker_key": "speaker.manager",
+					"text_key": "cutscene.quotas.sabotage_reply",
+					"choices": [
+						{"label_key": "choice.continue", "next": ""}
+					]
+				}
+			]
+		},
+		{
+			"id": "cs_act2_prologue",
+			"start_node_id": "a2_1",
+			"nodes": [
+				{
+					"id": "a2_1",
+					"speaker_key": "speaker.narrator",
+					"text_key": "cutscene.act2.node1",
+					"choices": [
+						{"label_key": "choice.continue", "next": "a2_2"}
+					]
+				},
+				{
+					"id": "a2_2",
+					"speaker_key": "speaker.cto",
+					"text_key": "cutscene.act2.node2",
+					"choices": [
+						{"label_key": "choice.continue", "next": "", "effects": [{"set_flag": ["act2_started", true]}]}
+					]
+				}
+			]
+		},
+		{
+			"id": "cs_finale",
+			"start_node_id": "fin_1",
+			"nodes": [
+				{
+					"id": "fin_1",
+					"speaker_key": "speaker.narrator",
+					"text_key": "cutscene.finale.node1",
+					"choices": [
+						{"label_key": "choice.continue", "next": "fin_2"}
+					]
+				},
+				{
+					"id": "fin_2",
+					"speaker_key": "speaker.cto",
+					"text_key": "cutscene.finale.node2",
+					"choices": [
+						{"label_key": "choice.to_ending", "next": "", "effects": [{"set_flag": ["ending_reached", true]}]}
+					]
+				}
+			]
+		}
+	]
+}

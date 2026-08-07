@@ -71,6 +71,42 @@
 			"reward": 380,
 			"penalty": 160,
 			"requires_roles": ["designer"]
+		},
+		{
+			"kind": "migration",
+			"source_dept": "eng",
+			"severity": 360,
+			"ttl": 3,
+			"reward": 1400,
+			"penalty": 700,
+			"requires_roles": []
+		},
+		{
+			"kind": "security_audit",
+			"source_dept": "ops",
+			"severity": 240,
+			"ttl": 3,
+			"reward": 850,
+			"penalty": 450,
+			"requires_roles": []
+		},
+		{
+			"kind": "support_surge",
+			"source_dept": "support",
+			"severity": 130,
+			"ttl": 2,
+			"reward": 420,
+			"penalty": 220,
+			"requires_roles": []
+		},
+		{
+			"kind": "press_demo",
+			"source_dept": "sales",
+			"severity": 300,
+			"ttl": 2,
+			"reward": 1200,
+			"penalty": 650,
+			"requires_roles": []
 		}
 	]
 }

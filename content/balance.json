@@ -1,8 +1,8 @@
 {
-	"severity_scale": 1.0,
+	"severity_scale": 0.7,
 	"floor_chance": 0.05,
 	"ceil_chance": 0.97,
-	"salary_per_employee": 60,
+	"salary_per_employee": 35,
 	"rest_recovery": 0.6,
 	"tickets_per_day": 4
 }

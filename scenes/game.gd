@@ -14,6 +14,7 @@ extends Control
 @onready var economy_view: Control = $EconomyView
 @onready var investigations_view: Control = $InvestigationsView
 @onready var narrative_view: Control = $NarrativeView
+@onready var cutscene_view: Control = $CutsceneView
 
 
 func _ready() -> void:
@@ -23,7 +24,7 @@ func _ready() -> void:
 	hud.open_economy.connect(_open_economy)
 	hud.end_day_requested.connect(_on_end_day)
 	narrative_view.chosen.connect(_on_narrative_choice)
-	_show_intro_for_day(Game.current_day())
+	_show_morning(Game.current_day())
 
 
 func _open_dispatch() -> void:
@@ -46,39 +47,28 @@ func _on_end_day() -> void:
 	# Collect any rest the player staged in the personnel screen, then roll. This
 	# keeps the one canonical end-of-day path and applies rest deterministically.
 	Game.end_day_with_staged_rest()
-	_show_intro_for_day(Game.current_day())
+	_show_morning(Game.current_day())
 
 
-func _show_intro_for_day(day: int) -> void:
-	# If the scenario scripted an intro for this day, show it; otherwise clear the
-	# notice. The intro text is the CTO/HR memo that frames the day's pressure.
-	var entry: Dictionary = Game.scenario.get(str(day), {})
-	if entry.has("intro"):
-		notice.text = L10n.t(String(entry["intro"]))
+func _show_morning(day: int) -> void:
+	# Each morning: show the chapter banner (act + title) as the day's framing
+	# text, then play any cutscene the chapter system or a reactive trigger has
+	# queued. The intro-text hack from the scenario is superseded by chapters.
+	var chapter: Chapter = Game.chapter_for_day(day)
+	if chapter != null:
+		notice.text = "%s — %s" % [L10n.t(chapter.act_title_key), L10n.t(chapter.title_key)]
 	else:
 		notice.text = ""
-	# Day-12 faction choice is gated by a flag set at end of day 12; the prompt
-	# fires the first morning the player sees the flag without having chosen.
-	_maybe_prompt_faction_choice()
+	var pending: Cutscene = Game.pending_cutscene()
+	if pending != null:
+		cutscene_view.play(pending)
 
 
-func _maybe_prompt_faction_choice() -> void:
-	if not bool(Game.state.flags.get("faction_choice_due", false)):
-		return
-	if not Game.allied_faction().is_empty():
-		return
-	# Present both rival departments. The chosen faction's standing rises; the
-	# choice is recorded as the faction_choice flag for the ending screen.
-	narrative_view.present("narrative.faction_choice.prompt", [
-		{"id": "meridian", "label_key": "narrative.faction_choice.meridian", "flag_key": "faction_choice", "flag_value": "meridian"},
-		{"id": "vertex", "label_key": "narrative.faction_choice.vertex", "flag_key": "faction_choice", "flag_value": "vertex"},
-	])
-
-
-func _on_narrative_choice(option_id: String, flag_key: String, flag_value: String) -> void:
-	# option_id is the faction id for the faction choice; the chosen ally gains
-	# standing, the other is left cold.
-	Game.apply_narrative_choice(flag_key, flag_value, option_id, 0.5)
+func _on_narrative_choice(_option_id: String, _flag_key: String, _flag_value: String) -> void:
+	# Retained hook for the legacy narrative_view; the faction choice now flows
+	# through the cutscene system (cs_faction_choice on chapter ch_faction_choice).
+	# Keep the connection so the narrative_view still compiles if reused later.
+	pass
 
 
 func _show_notice(screen: String) -> void:
