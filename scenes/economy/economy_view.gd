@@ -58,7 +58,7 @@ func _populate_contracts() -> void:
 	for raw: Variant in Game.contract_catalog:
 		var contract: Dictionary = raw as Dictionary
 		var row := HBoxContainer.new()
-		row.theme_override_constants_separation = 12
+		row.add_theme_constant_override("separation", 12)
 		var title := Label.new()
 		title.text = L10n.t(String(contract.get("title_key", "")))
 		title.custom_minimum_size = Vector2(200, 0)

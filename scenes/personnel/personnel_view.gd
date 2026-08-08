@@ -38,7 +38,7 @@ func _refresh(_unused: Variant = null) -> void:
 
 func _make_row(e: Employee) -> HBoxContainer:
 	var row := HBoxContainer.new()
-	row.theme_override_constants_separation = 12
+	row.add_theme_constant_override("separation", 12)
 	var name := Label.new()
 	name.text = "%s · %s · %s" % [e.name, e.role, e.dept]
 	name.custom_minimum_size = Vector2(260, 0)
