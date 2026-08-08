@@ -1,12 +1,10 @@
-; This Is the Office — Godot 4 project.
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
 ;
-; A corporate reimagining of "This Is the Police": you are an office manager
-; given 180 working days by the CTO to hit a profit target while keeping the
-; team together through a war between rival departments.
-;
-; Rendering and display mirror the zpg conventions: GL Compatibility renderer,
-; nearest-neighbour textures (the office is drawn as crisp isometric tiles), and
-; a 1280x800 window that keeps a 1:1 aspect on Steam Deck. See docs/architecture.md.
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
 
 config_version=5
 
@@ -25,8 +23,6 @@ L10n="*res://autoload/l10n.gd"
 
 [debug]
 
-; Static typing is mandatory everywhere, the same way it is in zpg. Untyped
-; declarations and unsafe property access are warnings, not silent.
 gdscript/warnings/untyped_declaration=1
 gdscript/warnings/unsafe_property_access=1
 
@@ -35,19 +31,13 @@ gdscript/warnings/unsafe_property_access=1
 window/size/viewport_width=1280
 window/size/viewport_height=800
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
 
 [internationalization]
 
-; Russian is the native language of the project; English ships alongside from
-; day one so the localization seams are exercised by every screen. Translations
-; are registered in code by autoload/l10n.gd (see comment there for why), so the
-; project file intentionally does not list translation resources.
 locale/test_key_ordering=true
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-textures/canvas_textures/default_texture_filter=0
-anti_aliasing/quality/msaa_2d=0
