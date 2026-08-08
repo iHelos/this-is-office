@@ -1,13 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://btioffgame0001"]
+[gd_scene load_steps=2 format=3 uid="uid://btioffgame0001"]
 
 [ext_resource type="Script" path="res://scenes/game.gd" id="1_game"]
-[ext_resource type="PackedScene" uid="uid://btioffhud0001" path="res://scenes/hud/hud.tscn" id="2_hud"]
-[ext_resource type="PackedScene" uid="uid://btioffdispatch0001" path="res://scenes/dispatch/dispatch_view.tscn" id="3_dispatch"]
-[ext_resource type="PackedScene" uid="uid://btioffpersonnel0001" path="res://scenes/personnel/personnel_view.tscn" id="4_personnel"]
-[ext_resource type="PackedScene" uid="uid://btioffecon0001" path="res://scenes/economy/economy_view.tscn" id="5_econ"]
-[ext_resource type="PackedScene" uid="uid://btioffinvest0001" path="res://scenes/investigations/investigations_view.tscn" id="6_invest"]
-[ext_resource type="PackedScene" uid="uid://btioffnarr0001" path="res://scenes/narrative/narrative_view.tscn" id="7_narr"]
-[ext_resource type="PackedScene" uid="uid://btioffcut0001" path="res://scenes/cutscene/cutscene_view.tscn" id="8_cut"]
 
 [node name="Game" type="Control"]
 layout_mode = 3
@@ -17,60 +10,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_game")
-
-[node name="Background" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.1, 0.12, 0.16, 1)
-
-[node name="OfficePlaceholder" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -60.0
-offset_right = 200.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "[ isometric office view — Phase 4 ]"
-horizontal_alignment = 1
-
-[node name="Notice" type="Label" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -400.0
-offset_top = -160.0
-offset_right = 400.0
-offset_bottom = -100.0
-grow_horizontal = 2
-grow_vertical = 0
-text = ""
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="HUD" parent="." instance=ExtResource("2_hud")]
-
-[node name="DispatchView" parent="." instance=ExtResource("3_dispatch")]
-
-[node name="PersonnelView" parent="." instance=ExtResource("4_personnel")]
-
-[node name="EconomyView" parent="." instance=ExtResource("5_econ")]
-
-[node name="InvestigationsView" parent="." instance=ExtResource("6_invest")]
-
-[node name="NarrativeView" parent="." instance=ExtResource("7_narr")]
-
-[node name="CutsceneView" parent="." instance=ExtResource("8_cut")]

@@ -1,34 +1,109 @@
 extends Control
-## The incident board — the investigations screen.
-##
-## Lists open incidents. Selecting one shows its clue progress and a pool of
-## troubleshooters (role 'troubleshooter'); assigning them gathers clues over
-## time (one action = one clue-gathering pass). Once clues_found reaches the
-## total, the incident enters 'deducing' and the closing choices (drop /
-## confront / sell) become available — each trades budget, faction standing,
-## and faction power differently.
-
-const EmployeeCard := preload("res://ui/employee_card.tscn")
+## The incident board — the investigations screen. Built in code.
 
 var active_incident_id: String = ""
 var assigned_ids: Array = []
 
-@onready var incident_list: VBoxContainer = %IncidentList
-@onready var detail_label: Label = %DetailLabel
-@onready var progress_label: Label = %ProgressLabel
-@onready var gather_button: Button = %GatherButton
-@onready var choices_box: VBoxContainer = %ChoicesBox
-@onready var troubleshooter_list: VBoxContainer = %TroubleshooterList
-@onready var close_button: Button = %CloseButton
+var _incident_list: VBoxContainer
+var _detail_label: Label
+var _progress_label: Label
+var _gather_button: Button
+var _choices_box: VBoxContainer
+var _troubleshooter_list: VBoxContainer
 
 
 func _ready() -> void:
-	gather_button.text = "Gather clues"
-	close_button.text = "Close"
-	gather_button.pressed.connect(_on_gather)
-	close_button.pressed.connect(func() -> void: visible = false)
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	visible = false
+	mouse_filter = Control.MOUSE_FILTER_STOP
+
+	add_child(_make_dim())
+	var panel: Control = _make_panel()
+
+	var columns := HBoxContainer.new()
+	columns.add_theme_constant_override("separation", 16)
+	columns.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	panel.add_child(columns)
+
+	var inc_col := _labeled_column("Incidents")
+	_incident_list = inc_col.find_child("List", true)
+	columns.add_child(inc_col)
+
+	var detail_col := VBoxContainer.new()
+	detail_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_col.alignment = BoxContainer.ALIGNMENT_CENTER
+	_detail_label = Label.new()
+	_detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail_col.add_child(_detail_label)
+	_progress_label = Label.new()
+	_progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail_col.add_child(_progress_label)
+	_gather_button = Button.new()
+	_gather_button.text = "Gather clues"
+	_gather_button.custom_minimum_size = Vector2(0, 44)
+	_gather_button.disabled = true
+	_gather_button.pressed.connect(_on_gather)
+	detail_col.add_child(_gather_button)
+	_choices_box = VBoxContainer.new()
+	_choices_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	_choices_box.add_theme_constant_override("separation", 6)
+	detail_col.add_child(_choices_box)
+	var close_btn := Button.new()
+	close_btn.text = "Close"
+	close_btn.custom_minimum_size = Vector2(0, 40)
+	close_btn.pressed.connect(func() -> void: visible = false)
+	detail_col.add_child(close_btn)
+	columns.add_child(detail_col)
+
+	var pool_col := _labeled_column("Troubleshooters")
+	_troubleshooter_list = pool_col.find_child("List", true)
+	columns.add_child(pool_col)
+
 	Game.state_changed.connect(_refresh)
-	_refresh()
+
+
+func _make_dim() -> ColorRect:
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.55)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	return dim
+
+
+func _make_panel() -> Control:
+	var panel := PanelContainer.new()
+	panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel.offset_left = 40.0
+	panel.offset_top = 40.0
+	panel.offset_right = -40.0
+	panel.offset_bottom = -100.0
+	add_child(panel)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 16)
+	panel.add_child(margin)
+	return margin
+
+
+func _labeled_column(title: String) -> Control:
+	var col := VBoxContainer.new()
+	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var lbl := Label.new()
+	lbl.text = title
+	col.add_child(lbl)
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.custom_minimum_size = Vector2(260, 0)
+	col.add_child(scroll)
+	var list := VBoxContainer.new()
+	list.name = "List"
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 6)
+	scroll.add_child(list)
+	return col
 
 
 func open() -> void:
@@ -39,50 +114,52 @@ func open() -> void:
 
 
 func _refresh(_unused: Variant = null) -> void:
-	_clear_children(incident_list)
-	_clear_children(troubleshooter_list)
-	_clear_children(choices_box)
-	# Incident cards.
+	if not visible:
+		return
+	_clear(_incident_list)
+	_clear(_troubleshooter_list)
+	_clear(_choices_box)
 	for inc: Incident in Game.state.incidents:
 		var btn := Button.new()
 		btn.text = "%s [%s] — %d/%d" % [L10n.t(inc.title), inc.state, inc.clues_found, inc.clues_total]
 		btn.disabled = inc.state == "closed"
+		btn.custom_minimum_size = Vector2(0, 44)
 		btn.pressed.connect(_on_incident_selected.bind(inc.id))
 		if inc.id == active_incident_id:
-			btn.modulate = Color(1.2, 1.2, 0.8)
-		incident_list.add_child(btn)
-	# Troubleshooter pool — only the troubleshooter role works incidents.
+			btn.modulate = Color(1.3, 1.3, 0.7)
+		_incident_list.add_child(btn)
 	for e: Employee in Game.state.employees:
 		if e.role != "troubleshooter" or not e.employed:
 			continue
-		var card: PanelContainer = EmployeeCard.instantiate()
-		troubleshooter_list.add_child(card)
-		card.setup(e)
-		card.toggled.connect(_on_troubleshooter_toggled.bind(e.id))
+		var btn := Button.new()
+		btn.text = "%s · xp %d · fat %.0f%%" % [e.name, e.xp, e.fatigue * 100.0]
+		btn.custom_minimum_size = Vector2(0, 44)
+		btn.disabled = e.on_rest
+		btn.pressed.connect(_on_troubleshooter_toggled.bind(e.id))
 		if assigned_ids.has(e.id):
-			card.modulate = Color(0.7, 1.0, 0.7)
+			btn.modulate = Color(0.6, 0.9, 0.6)
+		_troubleshooter_list.add_child(btn)
 	_refresh_detail()
 
 
 func _refresh_detail() -> void:
 	if active_incident_id.is_empty():
-		detail_label.text = "(select an incident)"
-		progress_label.text = ""
-		gather_button.disabled = true
+		_detail_label.text = "(select an incident)"
+		_progress_label.text = ""
+		_gather_button.disabled = true
 		return
 	var inc: Incident = _find_incident(active_incident_id)
 	if inc == null:
 		active_incident_id = ""
 		_refresh_detail()
 		return
-	detail_label.text = "%s · %s · sev %d" % [L10n.t(inc.title), inc.kind, inc.severity]
-	progress_label.text = "clues %d / %d" % [inc.clues_found, inc.clues_total]
-	gather_button.disabled = inc.state != "open" or assigned_ids.is_empty()
-	# Closing choices appear only once the incident is fully deduced.
+	_detail_label.text = "%s · %s · sev %d" % [L10n.t(inc.title), inc.kind, inc.severity]
+	_progress_label.text = "clues %d / %d" % [inc.clues_found, inc.clues_total]
+	_gather_button.disabled = inc.state != "open" or assigned_ids.is_empty()
 	if inc.state == "deducing":
 		var prompt := Label.new()
 		prompt.text = "Choose how to close:"
-		choices_box.add_child(prompt)
+		_choices_box.add_child(prompt)
 		for raw: Variant in inc.choices:
 			var choice: Dictionary = raw as Dictionary
 			var btn := Button.new()
@@ -92,8 +169,9 @@ func _refresh_detail() -> void:
 				float(choice.get("standing_delta", 0.0)),
 				int(choice.get("faction_power_delta", 0)),
 			]
+			btn.custom_minimum_size = Vector2(0, 40)
 			btn.pressed.connect(Game.close_incident.bind(inc.id, String(choice.get("id", ""))))
-			choices_box.add_child(btn)
+			_choices_box.add_child(btn)
 
 
 func _on_incident_selected(id: String) -> void:
@@ -114,8 +192,6 @@ func _on_gather() -> void:
 	if active_incident_id.is_empty():
 		return
 	Game.assign_troubleshooters(active_incident_id, assigned_ids.duplicate())
-	# Keep the assignment for repeated gathering until the player switches
-	# incidents; the refresh reflects the new clue count.
 
 
 func _find_incident(id: String) -> Incident:
@@ -125,7 +201,7 @@ func _find_incident(id: String) -> Incident:
 	return null
 
 
-func _clear_children(node: Node) -> void:
+func _clear(node: Node) -> void:
 	for c: Node in node.get_children():
 		node.remove_child(c)
 		c.queue_free()
