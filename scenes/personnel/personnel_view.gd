@@ -71,8 +71,8 @@ func _make_panel() -> Control:
 
 
 func open() -> void:
-	_refresh()
 	visible = true
+	_refresh()
 
 
 func _refresh(_unused: Variant = null) -> void:

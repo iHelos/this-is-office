@@ -16,6 +16,8 @@ var _employee_list: VBoxContainer
 var _active_label: Label
 var _chance_label: Label
 var _send_button: Button
+var _result_label: Label
+var _header_label: Label
 
 
 func _ready() -> void:
@@ -26,27 +28,41 @@ func _ready() -> void:
 	add_child(_make_dim())
 	var panel: Control = _make_panel()
 
+	var vbox := VBoxContainer.new()
+	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_theme_constant_override("separation", 8)
+	panel.add_child(vbox)
+
+	_header_label = Label.new()
+	_header_label.add_theme_font_size_override("font_size", 20)
+	vbox.add_child(_header_label)
+
 	var columns := HBoxContainer.new()
 	columns.add_theme_constant_override("separation", 16)
 	columns.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.add_child(columns)
+	vbox.add_child(columns)
 
 	# Left: tickets.
 	var tickets_col := _labeled_column("Tickets")
-	_ticket_list = tickets_col.find_child("List", true)
+	_ticket_list = tickets_col.find_child("List", true, false)
 	columns.add_child(tickets_col)
 
 	# Centre: active ticket + actions.
 	var active_col := VBoxContainer.new()
 	active_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	active_col.alignment = BoxContainer.ALIGNMENT_CENTER
+	active_col.add_theme_constant_override("separation", 8)
 	_active_label = Label.new()
 	_active_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	active_col.add_child(_active_label)
 	_chance_label = Label.new()
 	_chance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	active_col.add_child(_chance_label)
+	_result_label = Label.new()
+	_result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_result_label.add_theme_font_size_override("font_size", 18)
+	active_col.add_child(_result_label)
 	_send_button = Button.new()
 	_send_button.text = "Send team"
 	_send_button.custom_minimum_size = Vector2(0, 44)
@@ -62,7 +78,7 @@ func _ready() -> void:
 
 	# Right: employee pool.
 	var pool_col := _labeled_column("Available staff")
-	_employee_list = pool_col.find_child("List", true)
+	_employee_list = pool_col.find_child("List", true, false)
 	columns.add_child(pool_col)
 
 	Game.state_changed.connect(_refresh)
@@ -115,16 +131,34 @@ func _labeled_column(title: String) -> Control:
 
 
 func open() -> void:
+	# visible must be set BEFORE _refresh, because _refresh early-returns when
+	# hidden — otherwise the board opens empty.
+	visible = true
 	active_ticket_id = ""
 	assigned_ids.clear()
+	_result_label.text = ""
 	_refresh()
-	visible = true
 
 
 func _on_send() -> void:
 	if active_ticket_id.is_empty() or assigned_ids.is_empty():
 		return
-	Game.assign_ticket(active_ticket_id, assigned_ids.duplicate())
+	var ticket_id: String = active_ticket_id
+	var team_size: int = assigned_ids.size()
+	var budget_before: int = Game.budget()
+	# assign_ticket is async (a brief beat so the office shows the team leave);
+	# await it, then flash the outcome before clearing the selection.
+	_send_button.disabled = true
+	await Game.assign_ticket(ticket_id, assigned_ids.duplicate())
+	var delta: int = Game.budget() - budget_before
+	var ticket: Ticket = _find_ticket(ticket_id)
+	var clean: bool = ticket != null and ticket.state == "clean"
+	if clean:
+		_result_label.text = "✓ clean  +$%d  (team of %d)" % [delta, team_size]
+		_result_label.modulate = Color(0.5, 0.9, 0.5)
+	else:
+		_result_label.text = "✗ fumbled  -$%d  (team of %d)" % [-delta, team_size]
+		_result_label.modulate = Color(0.95, 0.5, 0.5)
 	active_ticket_id = ""
 	assigned_ids.clear()
 
@@ -132,6 +166,7 @@ func _on_send() -> void:
 func _refresh(_unused: Variant = null) -> void:
 	if not visible:
 		return
+	_header_label.text = "Day %d — pick a ticket, then assign staff and Send" % Game.current_day()
 	_clear(_ticket_list)
 	_clear(_employee_list)
 	for tk: Ticket in Game.state.tickets:
@@ -152,9 +187,14 @@ func _refresh(_unused: Variant = null) -> void:
 		if not e.employed:
 			continue
 		var btn := Button.new()
-		btn.text = "%s · %s\nxp %d · fat %.0f%% · loy %+.1f" % [e.name, e.role, e.xp, e.fatigue * 100.0, e.loyalty]
+		var status := ""
+		if e.on_rest:
+			status = " (resting)"
+		elif e.on_assignment:
+			status = " (on a ticket)"
+		btn.text = "%s · %s%s\nxp %d · fat %.0f%% · loy %+.1f" % [e.name, e.role, status, e.xp, e.fatigue * 100.0, e.loyalty]
 		btn.custom_minimum_size = Vector2(0, 48)
-		btn.disabled = e.on_rest
+		btn.disabled = e.on_rest or e.on_assignment
 		btn.pressed.connect(_on_employee_toggled.bind(e.id))
 		if assigned_ids.has(e.id):
 			btn.modulate = Color(0.6, 0.9, 0.6)

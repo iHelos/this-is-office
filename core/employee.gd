@@ -18,6 +18,7 @@ var fatigue: float = 0.0        # 0..1, accumulates per assignment, recovered on
 var loyalty: float = 0.0        # -1..+1, disposition toward the player
 var employed: bool = true
 var on_rest: bool = false       # set when given the day off; recovers fatigue
+var on_assignment: bool = false # transient: on a ticket right now (visual link to the office)
 var traits: PackedStringArray = PackedStringArray()
 
 
@@ -32,6 +33,7 @@ static func from_dict(d: Dictionary) -> Employee:
 	e.loyalty = float(d.get("loyalty", 0.0))
 	e.employed = bool(d.get("employed", true))
 	e.on_rest = bool(d.get("on_rest", false))
+	e.on_assignment = bool(d.get("on_assignment", false))
 	var raw_traits: Array = d.get("traits", [])
 	var arr := PackedStringArray()
 	for tr: Variant in raw_traits:
@@ -51,6 +53,7 @@ func clone() -> Employee:
 	c.loyalty = loyalty
 	c.employed = employed
 	c.on_rest = on_rest
+	c.on_assignment = on_assignment
 	c.traits = traits.duplicate()
 	return c
 
@@ -66,5 +69,6 @@ func to_dict() -> Dictionary:
 		"loyalty": loyalty,
 		"employed": employed,
 		"on_rest": on_rest,
+		"on_assignment": on_assignment,
 		"traits": Array(traits),
 	}

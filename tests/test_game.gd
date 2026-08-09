@@ -43,11 +43,16 @@ func _end_day_advances_clock_and_refreshes_board(t: TestCase) -> void:
 
 func _assign_ticket_resolves_in_place(t: TestCase) -> void:
 	# Assigning the whole team to the first ticket should resolve it to clean or
-	# fumbled, never leave it open. This exercises the autoload -> Sim path.
+	# fumbled, never leave it open. assign_ticket is async (a brief beat for the
+	# office view), so we await it before asserting.
+	Game.brief_duration = 0.0
 	Game.start_new_game(12345)
 	var first: Ticket = Game.state.tickets[0]
 	var ids: Array = []
 	for e: Employee in Game.state.employees:
 		ids.append(e.id)
-	Game.assign_ticket(first.id, ids)
+	await Game.assign_ticket(first.id, ids)
 	t.ne(first.state, "open", "an assigned ticket leaves the open state")
+	# The on_assignment flag must clear once the ticket is resolved.
+	for e: Employee in Game.state.employees:
+		t.ok(not e.on_assignment, "employee '%s' is no longer on assignment" % e.id)

@@ -84,14 +84,43 @@ func target() -> int:
 
 ## Resolve a ticket assignment immediately (during dispatch). Emits
 ## [signal state_changed] so the dispatch screen can refresh.
+## Resolve a ticket assignment. The assignees are flagged on_assignment for a
+## brief beat so the office view shows them leaving their desks; then the ticket
+## is resolved and the flag clears. Emits state_changed at each transition so
+## both the office and the dispatch board refresh.
 func assign_ticket(ticket_id: String, employee_ids: Array) -> void:
 	if state == null:
 		return
 	var ticket: Ticket = _find_ticket(ticket_id)
 	if ticket == null or ticket.state != "open":
 		return
-	Sim.resolve_assignment(state, ticket, employee_ids, Rng.new(seed_value).fork("day_%d" % state.day))
+	# Mark the assignees as away from their desks; the office view hides them.
+	for id: String in employee_ids:
+		var e: Employee = state.employee_by_id(id)
+		if e != null:
+			e.on_assignment = true
 	state_changed.emit()
+	# Brief beat so the player sees the desks empty before the result lands.
+	await _wait_brief()
+	Sim.resolve_assignment(state, ticket, employee_ids, Rng.new(seed_value).fork("day_%d" % state.day))
+	for id: String in employee_ids:
+		var e: Employee = state.employee_by_id(id)
+		if e != null:
+			e.on_assignment = false
+	state_changed.emit()
+
+
+## Duration of the on-assignment visual beat. The real game wants ~0.8s so the
+## player sees desks empty and refill; tests set this to 0 to skip the wait.
+var brief_duration: float = 0.8
+
+
+## Await a short real-time beat. Centralised so the duration is one knob and so
+## tests can zero it out.
+func _wait_brief() -> void:
+	if brief_duration <= 0.0:
+		return
+	await get_tree().create_timer(brief_duration).timeout
 
 
 ## Apply the player's end-of-day actions and roll the day forward. The actions

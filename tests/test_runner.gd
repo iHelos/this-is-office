@@ -47,7 +47,10 @@ func _ready() -> void:
 		if suite == null:
 			t.fail("suite could not be instantiated")
 			continue
-		suite.call("run", t)
+		# Await the suite's run() so async suites (those that await inside, e.g.
+		# the assign_ticket bridge test) finish before we move on. Sync suites
+		# return null immediately and the await is a no-op.
+		await suite.run(t)
 
 	var elapsed := Time.get_ticks_msec() - started
 	if t.failures.is_empty():

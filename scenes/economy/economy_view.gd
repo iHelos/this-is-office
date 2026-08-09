@@ -96,8 +96,10 @@ func _make_panel() -> Control:
 
 
 func open() -> void:
-	_refresh()
+	# visible before _refresh: _refresh reads state and populates the screen, and
+	# some guards early-return when hidden.
 	visible = true
+	_refresh()
 
 
 func _refresh(_unused: Variant = null) -> void:

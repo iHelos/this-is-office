@@ -18,7 +18,7 @@ const SEEDS_TO_TRY := 5
 func run(t: TestCase) -> void:
 	var banked: Array = []
 	for seed: int in SEEDS_TRY():
-		banked.append(_autoplay(seed))
+		banked.append(await _autoplay(seed))
 	banked.sort()
 	# Median across seeds. Greedy autoplay is not optimal play, so the bar is the
 	# target itself: a reasonable player doing better than greedy should clear it
@@ -34,6 +34,7 @@ func SEEDS_TRY() -> Array:
 
 
 func _autoplay(seed_value: int) -> int:
+	Game.brief_duration = 0.0   # skip the visual beat so 180-day autoplay is fast
 	Game.start_new_game(seed_value)
 	# Roll cutscenes forward so they don't block (mark all as seen) — the autoplay
 	# cares about the economy, not the narrative.
@@ -47,7 +48,7 @@ func _autoplay(seed_value: int) -> int:
 				team.append(e.id)
 		for tk: Ticket in Game.state.tickets:
 			if tk.state == "open" and not team.is_empty():
-				Game.assign_ticket(tk.id, team)
+				await Game.assign_ticket(tk.id, team)
 		# Take the safest side contract for extra income each day.
 		Game.take_contract("ct_freelance")
 		# Rotate a little rest to keep fatigue manageable: rest the most-tired

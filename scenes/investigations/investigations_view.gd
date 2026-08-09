@@ -27,7 +27,7 @@ func _ready() -> void:
 	panel.add_child(columns)
 
 	var inc_col := _labeled_column("Incidents")
-	_incident_list = inc_col.find_child("List", true)
+	_incident_list = inc_col.find_child("List", true, false)
 	columns.add_child(inc_col)
 
 	var detail_col := VBoxContainer.new()
@@ -57,7 +57,7 @@ func _ready() -> void:
 	columns.add_child(detail_col)
 
 	var pool_col := _labeled_column("Troubleshooters")
-	_troubleshooter_list = pool_col.find_child("List", true)
+	_troubleshooter_list = pool_col.find_child("List", true, false)
 	columns.add_child(pool_col)
 
 	Game.state_changed.connect(_refresh)
@@ -107,10 +107,10 @@ func _labeled_column(title: String) -> Control:
 
 
 func open() -> void:
+	visible = true
 	active_incident_id = ""
 	assigned_ids.clear()
 	_refresh()
-	visible = true
 
 
 func _refresh(_unused: Variant = null) -> void:
